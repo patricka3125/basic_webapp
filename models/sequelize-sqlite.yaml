@@ -1,0 +1,6 @@
+dbname: chat
+username: 
+password: 
+params: 
+  dialect: sqlite
+  storage: chat-sequelize.sqlite3
