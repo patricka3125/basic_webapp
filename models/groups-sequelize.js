@@ -62,3 +62,11 @@ exports.deleteFromGroup = function(group_id, username) {
     error(err.stack);
   });
 };
+
+exports.groupList = function(username) {
+  return exports.connectDB()
+  .then(SQGroup => SQGroup.findAll({ where: { username: username }, attributes: [ 'group_id'] }))
+  .then(list => {
+    return list.map(group => group.group_id);
+  });
+};

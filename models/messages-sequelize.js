@@ -11,7 +11,7 @@ const error = require('debug')('messages:error');
 var SQMessage;
 var sequlz;
 
-exports.connectDB = function(db_name) {
+exports.connectDB = function() {
   if(SQMessage) return SQMessage.sync();
 
   return new Promise((resolve, reject) => {
@@ -36,7 +36,7 @@ exports.connectDB = function(db_name) {
 };
 
 exports.sendMessage = function(from, group_id, message) {
-  exports.connectDB('Message')
+  return exports.connectDB()
   .then(SQMessage => SQMessage.create({
     from, group_id, message, timestamp: new Date()
   }))
@@ -52,8 +52,17 @@ exports.sendMessage = function(from, group_id, message) {
 };
 
 exports.deleteMessage = function(id) {
-  exports.connectDB('Message')
+  return exports.connectDB()
   .then(SQMessage => SQMessage.find({ where: { id } }))
   .then(msg => msg.destroy());
 };
 
+exports.messageList = function(group_id, username) {
+  return exports.connectDB()
+  .then(SQMessage => SQMessage.findAll({ where: { group_id: group_id } }))
+  .then(msgs => {
+    return msgs.map(msg => {
+      return { from: msg.from, group_id: msg.group_id, message: msg.message, timestamp: msg.timestamp };
+    });
+  });
+};
