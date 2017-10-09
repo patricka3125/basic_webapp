@@ -22,13 +22,11 @@ var connectREST = function() {
   });
 };
 
-exports.create = function(username, password, provider, familyName, givenName,
-                          middleName, emails, photos) {
+exports.create = function(username, password) {
   return connectREST().then(client => {
     return new Promise((resolve, reject) => {
       client.post('/create-user', {
-        username, password, provider,
-        familyName, givenName, middleName, emails, photos
+        username, password
       },
       (err, req, res, obj) => {
         if(err) return reject(err);
@@ -38,12 +36,11 @@ exports.create = function(username, password, provider, familyName, givenName,
   });
 };
 
-exports.update = function(username, password, provider, familyName, givenName,
-                          middleName, emails, photos) {
+exports.update = function(username, password) {
   return connectREST().then(client => {
     return new Promise((resolve, reject) => {
       client.post('/update-user/' + username, {
-        password, provider, familyName, givenName, middleName, email, photos
+        password
       },
       (err, req, res, obj) => {
         if(err) return reject(err);
@@ -85,11 +82,6 @@ exports.findOrCreate = function(profile) {
       client.post('/find-or-create', {
         username: profile.id,
         password: profile.password,
-        provider: profile.provider,
-        familyName: profile.familyName,
-        givenName: profile.givenName,
-        middleName: profile.middleName,
-        emails: profile.emails, photos: profile.photos
       },
       (err, req, res, obj) => {
         if(err) return reject(err);
