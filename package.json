@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "DEBUG=chat:* node ./bin/www",
+    "start": "DEBUG=chat:* USERS_MODEL=models/users-rest USER_SERVICE_URL=http://localhost:3333 node ./bin/www",
     "postinstall": "bower install"
   },
   "dependencies": {
@@ -16,6 +16,8 @@
     "js-yaml": "^3.9.1",
     "morgan": "~1.8.1",
     "mysql": "^2.15.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "restify": "^4.3.1",
     "serve-favicon": "~2.4.2"
   },
