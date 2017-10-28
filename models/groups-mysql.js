@@ -4,9 +4,11 @@ const mysql = require('mysql');
 
 const log = require('debug')('chat:groups-mysql');
 const error = require('debug')('chat:error');
+const group_user = require('./group_user-mysql');
 
 var group_connect;
 
+// Establish connection to database.
 exports.connectDB = function() {
   return new Promise((resolve, reject) => {
     group_connect = mysql.createConnection({
@@ -24,11 +26,14 @@ exports.connectDB = function() {
   });
 };
 
-exports.createGroup = function(groupname) {
+/*
+  Create new group with user specified group name
+*/
+exports.createGroup = function(group_name) {
   exports.connectDB()
   .then(connection => {
     return new Promise((resolve, reject) => {
-      connection.query('INSERT INTO `groups` SET `group_name` = ?', groupname,
+      connection.query('INSERT INTO `groups` SET `group_name` = ?', group_name,
 	function(err, results, fields) {
 	  if(err) reject(err);
 	  else resolve(results);
@@ -41,11 +46,19 @@ exports.createGroup = function(groupname) {
   });
 };
 
-exports.deleteGroup = function(groupid) {
+/*
+  Delete group from database. Also deletes all entries of users in this group 
+  in group_users table.
+*/
+exports.deleteGroup = function(group_id) {
   exports.connectDB()
   .then(connection => {
     return new Promise((resolve, reject) => {
-      connection.query('DELETE FROM `groups` WHERE `group_id` = ?', groupid,
+
+      // Delete entries of users in group_users belonging to the group
+      group_user.deleteGroup(group_id);
+
+      connection.query('DELETE FROM `groups` WHERE `group_id` = ?', group_id,
         function(err, results, fields) {
           if(err) reject(err);
           else resolve(results);
@@ -58,11 +71,14 @@ exports.deleteGroup = function(groupid) {
   });
 };
 
-exports.findGroup = function(groupid) {
+/*
+  Returns type RowDataPacket of a group of parameterized group_id.
+*/
+exports.findGroup = function(group_id) {
   exports.connectDB()
   .then(connection => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM `groups` WHERE `group_id` = ?', groupid,
+      connection.query('SELECT * FROM `groups` WHERE `group_id` = ?', group_id,
         function(err, results, fields) {
           if(err) reject(err);
           else resolve(results);
@@ -72,6 +88,9 @@ exports.findGroup = function(groupid) {
   });
 };
 
+/*
+  Returns number of groups in table as a resolved promise.
+*/
 exports.count = function() {
   return exports.connectDB().then(connection => {
     return new Promise((resolve, reject) => {
@@ -83,7 +102,8 @@ exports.count = function() {
       );
     })
     .then(results => {
-      console.log(results[0].count);
+      console.log("Count: " + results[0].count);
+      return results[0].count;
     });
   });
 };

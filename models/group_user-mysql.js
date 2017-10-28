@@ -7,6 +7,7 @@ const error = require('debug')('chat:error');
 
 var groupUser_connect;
 
+// Establish connection to database.
 exports.connectDB = function() {
   return new Promise((resolve, reject) => {
     groupUser_connect = mysql.createConnection({
@@ -44,6 +45,9 @@ exports.addUser = function(group_id, user_id) {
   });
 };
 
+/*
+  Removes user user_id from group of group_id
+*/
 exports.deleteUser = function(group_id, user_id) {
   exports.connectDB()
   .then(connection => {
@@ -81,5 +85,48 @@ exports.listUsers = function(group_id) {
       });
       return results;
     }); 
+  });
+};
+
+/* Returns boolean that specifies if user has permission to change group settings. (if user is also in the group that is being changed) */
+exports.userPermission = function(group_id, user_id) {
+  exports.connectDB()
+  .then(connection => {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT * FROM `group_users` WHERE `group_id` = ? '
+			+ 'AND `user_id` = ?', [group_id, user_id],
+			function(err, results, fields) {
+        if(err) reject(err);
+        else resolve(results);
+      });
+    })
+    .then(result => {
+      if(!result[0]) {
+        console.log("User no permission");
+        return false;
+      }else return true;
+    });
+  });
+};
+
+/*
+  * Called internally from groups-mysql *
+  Deletes all users belonging in group_id
+*/
+exports.deleteGroup = function(group_id) {
+  exports.connectDB()
+  .then(connection => {
+    return new Promise((resolve, reject) => {
+      connection.query('DELETE FROM `group_users` WHERE `group_id` = ? ', 
+			group_id,
+	function(err, results, fields) {
+          if(err) reject(err);
+          else resolve(results);
+        }
+      );
+    })
+    .then(results => {
+      console.log(results);
+    });
   });
 };

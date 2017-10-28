@@ -9,3 +9,5 @@ select * from group_users;
 alter table group_users AUTO_INCREMENT=1;
 
 delete from group_users where group_id = 1 and user_id = 1;
+
+select * from group_users where group_id = 1 and user_id = 2;

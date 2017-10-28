@@ -4,9 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var groups = require('./routes/groups');
 
 var app = express();
 
@@ -21,9 +24,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  store: new FileStore({ path: "sessions" }),
+  secret: 'keyboard mouse',
+  resave: true,
+  saveUninitialized: true
+}));
+users.initPassport(app);
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/users', users.router);
+app.use('/groups', groups);
 app.use('/vendor/bootstrap', express.static(path.join(__dirname, 'bower_components', 'bootstrap', 'dist')));
 app.use('/vendor/jquery', express.static(path.join(__dirname, 'bower_components', 'jquery', 'dist')));
 
