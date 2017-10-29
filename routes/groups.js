@@ -5,7 +5,7 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var groups = require(process.env.GROUPS_MODEL ? path.join('..', process.env.USERS_MODEL) : '../models/groups-mysql');
-var group_user = require('../models/groups_user-mysql');
+var group_user = require('../models/group_user-mysql');
 
 const usersModel = require(process.env.USERS_MODEL
 	? path.join('..', process.env.USERS_MODEL)
@@ -38,3 +38,5 @@ router.post('add-user', usersRouter.ensureAuthenticated, (req, res, next) => {
   })
   .catch(err => { next(err); });
 });
+
+module.exports = router;

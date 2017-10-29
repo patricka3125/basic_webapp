@@ -1,5 +1,6 @@
 'use strict'
 
+const path = require('path');
 const error = require('debug')('notes:error');
 const express = require('express');
 const router = express.Router();
@@ -17,7 +18,7 @@ exports.initPassport = function(app) {
 
 // What passport uses to authenticate
 passport.use(new LocalStrategy(
-  function(username, password, done) {{
+  function(username, password, done) {
     usersModel.userPasswordCheck(username, password)
     .then(check => {
       if(check.check) { // userPasswordcheck returns true
@@ -28,8 +29,8 @@ passport.use(new LocalStrategy(
       return check;
     })
     .catch(err => done(err));
-  }
-});
+  })
+);
 
 // Ensures that user session is still logged in
 exports.ensureAuthenticated = function(req, res, next) {
@@ -46,7 +47,9 @@ router.get('/signup', function(req, res, next) {
 });
 
 // Create Account
-//router.post('/signup', function
+/*router.post('/signup', function(req, res, next) {
+  
+});*/
 
 // Login Page
 router.get('/login', function(req, res, next) {
@@ -79,5 +82,5 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(username, done) {
   usersModel.find(username)
   .then(user => done(null, user))
-  .catch(err => done(err);
+  .catch(err => done(err));
 });
