@@ -10,12 +10,8 @@ const error = require('debug')('chat:error');
 router.get('/', function(req, res, next) {
   res.render('index', {
     title: 'Chat App',
-    //messagelist: messagelist
+    user:  req.user ? req.user : undefined
   });
-});
-
-router.get('/login', function(req, res, next) {
-  res.render('login', {});
 });
 
 module.exports = router;

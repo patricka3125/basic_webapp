@@ -38,6 +38,9 @@ app.use('/groups', groups);
 app.use('/vendor/bootstrap', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
 app.use('/vendor/jquery', express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist')));
 app.use('/vendor/popper', express.static(path.join(__dirname, 'node_modules', 'popper.js', 'dist', 'umd')));
+app.use('/users/vendor/bootstrap', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
+app.use('/users/vendor/jquery', express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist')));
+app.use('/users/vendor/popper', express.static(path.join(__dirname, 'node_modules', 'popper.js', 'dist', 'umd')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

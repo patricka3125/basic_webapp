@@ -1,7 +1,7 @@
 'use strict'
 
+const util = require('util');
 const path = require('path');
-const error = require('debug')('notes:error');
 const express = require('express');
 const router = express.Router();
 exports.router = router;
@@ -10,6 +10,9 @@ const LocalStrategy = require('passport-local').Strategy;
 const usersModel = require(process.env.USERS_MODEL
 	? path.join('..', process.env.USERS_MODEL)
 	: '../models/users-rest');
+
+const log = require('debug')('chat:router-users');
+const error = require('debug')('chat:error');
 
 exports.initPassport = function(app) {
   app.use(passport.initialize());
@@ -53,10 +56,10 @@ router.get('/signup', function(req, res, next) {
 
 // Login Page
 router.get('/login', function(req, res, next) {
-  log(util.inspect(req));
+  //log(util.inspect(req));
   res.render('login', {
-    title: "Login to Chat",
-    user: req.user,
+    title: "Login",
+    user: req.user ? req.user : undefined
   });
 });
 
