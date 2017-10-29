@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "DEBUG=chat:* GROUPS_MODEL=models/groups-mysql USERS_MODEL=models/users-rest USER_SERVICE_URL=http://localhost:3333 node ./bin/www",
-    "postinstall": "bower install"
+    "start": "DEBUG=chat:* GROUPS_MODEL=models/groups-mysql USERS_MODEL=models/users-rest USER_SERVICE_URL=http://localhost:3333 node ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
@@ -22,8 +21,5 @@
     "restify": "^4.3.1",
     "serve-favicon": "~2.4.2",
     "session-file-store": "^1.1.2"
-  },
-  "devDependencies": {
-    "bower": "^1.8.2"
   }
 }
