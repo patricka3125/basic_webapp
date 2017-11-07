@@ -27,6 +27,7 @@
     "session-file-store": "^1.1.2"
   },
   "devDependencies": {
+    "connect-flash": "^0.1.1",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0"
   }
