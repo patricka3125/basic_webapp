@@ -30,7 +30,7 @@ exports.connectDB = function() {
   Create new group with user specified group name
 */
 exports.createGroup = function(group_name) {
-  exports.connectDB()
+  return exports.connectDB()
   .then(connection => {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO `groups` SET `group_name` = ?', group_name,
@@ -51,7 +51,7 @@ exports.createGroup = function(group_name) {
   in group_users table.
 */
 exports.deleteGroup = function(group_id) {
-  exports.connectDB()
+  return exports.connectDB()
   .then(connection => {
     return new Promise((resolve, reject) => {
 
@@ -75,7 +75,7 @@ exports.deleteGroup = function(group_id) {
   Returns type RowDataPacket of a group of parameterized group_id.
 */
 exports.findGroup = function(group_id) {
-  exports.connectDB()
+  return exports.connectDB()
   .then(connection => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM `groups` WHERE `group_id` = ?', group_id,

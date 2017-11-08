@@ -28,7 +28,7 @@ exports.connectDB = function() {
 /* Adds a user to a group. User should already be checked before if exists in
    user DB. Promise function that doesn't return anything. */ 
 exports.addUser = function(group_id, user_id) {
-  exports.connectDB()
+  return exports.connectDB()
   .then(connection => {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO `group_users` SET `group_id` = ?,' +
@@ -49,7 +49,7 @@ exports.addUser = function(group_id, user_id) {
   Removes user user_id from group of group_id
 */
 exports.deleteUser = function(group_id, user_id) {
-  exports.connectDB()
+  return exports.connectDB()
   .then(connection => {
     return new Promise((resolve, reject) => {
       connection.query('DELETE FROM `group_users` WHERE `group_id` = ? ' +
@@ -62,6 +62,7 @@ exports.deleteUser = function(group_id, user_id) {
     })
     .then(results => {
       console.log(results);
+      return results;
     });
   });
 };
@@ -69,7 +70,7 @@ exports.deleteUser = function(group_id, user_id) {
 /* Returns resolved promise function that returns an array of user_id's for
    specified group_id. */
 exports.listUsers = function(group_id) {
-  exports.connectDB()
+  return exports.connectDB()
   .then(connection => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM `group_users` WHERE `group_id` = ?',
@@ -90,7 +91,7 @@ exports.listUsers = function(group_id) {
 
 /* Returns boolean that specifies if user has permission to change group settings. (if user is also in the group that is being changed) */
 exports.userPermission = function(group_id, user_id) {
-  exports.connectDB()
+  return exports.connectDB()
   .then(connection => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM `group_users` WHERE `group_id` = ? '
@@ -102,9 +103,8 @@ exports.userPermission = function(group_id, user_id) {
     })
     .then(result => {
       if(!result[0]) {
-        console.log("User no permission");
         return false;
-      }else return true;
+      } else return true; 
     });
   });
 };
@@ -114,7 +114,7 @@ exports.userPermission = function(group_id, user_id) {
   Deletes all users belonging in group_id
 */
 exports.deleteGroup = function(group_id) {
-  exports.connectDB()
+  return exports.connectDB()
   .then(connection => {
     return new Promise((resolve, reject) => {
       connection.query('DELETE FROM `group_users` WHERE `group_id` = ? ', 
