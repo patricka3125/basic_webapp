@@ -49,6 +49,12 @@ body {
 
     <div class="container">
 
+      <% if(errorMsg && errorMsg != "") { %>
+        <div class="alert alert-danger" role="alert">
+          <%= errorMsg %>
+        </div>
+      <% } %>
+
       <form method="POST" action='/users/login' class="form-signin">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputUsername" class="sr-only">Username</label>

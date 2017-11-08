@@ -25,9 +25,17 @@ passport.use(new LocalStrategy(
     usersModel.userPasswordCheck(username, password)
     .then(check => {
       if(check.check) { // userPasswordcheck returns true
-        done(null, { id: check.user_id, username: check.username });
+
+        done(null, {
+          id: check.user_id, 
+          username: check.username 
+        }, 
+        {
+          message: check.message
+        });
+
       } else { // userPasswordCheck returns false
-        done(null, false, check.message);
+        done(null, false, { message: check.message });
       }
       return check;
     })
@@ -59,7 +67,8 @@ router.get('/login', function(req, res, next) {
   //log(util.inspect(req));
   res.render('login', {
     title: "Login",
-    user: req.user ? req.user : undefined
+    user: req.user ? req.user : undefined,
+    errorMsg: req.flash('error')
   });
 });
 
@@ -68,7 +77,8 @@ router.post('/login',
   passport.authenticate('local', {
     successRedirect: '/',	// SUCCESS: Go to home page
     failureRedirect: 'login',	// FAIL: Go to /user/login
-    failureFlash: 'Invalid username or password.'
+    failureFlash: true,
+    successFlash: true
   })
 );
 
